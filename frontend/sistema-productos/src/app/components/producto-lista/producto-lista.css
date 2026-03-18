@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: 100vw; /* Ocupa todo el ancho visual */
+}
+
+table {
+  width: 100% !important;
+  min-width: 1000px; /* Evita que las columnas se amontonen */
+}
+/* Forzamos al componente a ocupar todo el ancho disponible */
+:host {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal de la tabla */
+.card {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 1.5rem; /* Bordes redondeados elegantes */
+  overflow: visible !important; /* Matamos el recorte que genera el scroll */
+}
+
+/* La tabla debe expandirse al 100% sí o sí */
+table {
+  width: 100% !important;
+  min-width: 100% !important;
+  border-collapse: collapse;
+  table-layout: auto; /* Permite que las columnas se ajusten al contenido */
+}
+
+/* Ajuste para las celdas para que no se amontone el texto */
+th, td {
+  white-space: nowrap; /* Evita que el texto salte de línea de forma fea */
+  padding: 1rem 1.5rem !important;
+}
+
+/* Estilo extra para el hover de las filas */
+tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.05) !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Eliminamos cualquier rastro de la barra de scroll gris */
+.overflow-x-auto {
+  overflow-x: visible !important;
+  width: 100% !important;
+}
