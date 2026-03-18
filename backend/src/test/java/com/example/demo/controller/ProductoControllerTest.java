@@ -3,47 +3,78 @@ package com.example.demo.controller;
 import com.example.demo.model.Producto;
 import com.example.demo.repository.ProductoRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
+import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
-
+import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProductoControllerTest {
 
-    // 1. Creamos el "doble" del repositorio
     private ProductoRepository repository = mock(ProductoRepository.class);
-
-    // 2. Lo pasamos al constructor (esto pone verde las líneas 16-18 de tu imagen)
     private ProductoController controller = new ProductoController(repository);
 
     @Test
-    void listarProductos_ok() {
-        // Preparar datos
-        List<Producto> lista = new ArrayList<>();
-        lista.add(new Producto());
-        when(repository.findAll()).thenReturn(lista);
+    void listar_debeRetornarListaCompleta() {
+        // Preparar
+        when(repository.findAll()).thenReturn(Arrays.asList(new Producto(), new Producto()));
 
-        // Actuar (esto pone verde las líneas 21-23 de tu imagen)
-        List<Producto> resultado = controller.listarProductos();
+        // Actuar
+        List<Producto> resultado = controller.listar();
 
         // Verificar
-        assertNotNull(resultado);
-        assertFalse(resultado.isEmpty());
+        assertEquals(2, resultado.size());
+        verify(repository).findAll();
     }
 
     @Test
-    void guardarProducto_ok() {
-        // Preparar datos
+    void guardar_debeRetornarProductoGuardado() {
+        // Preparar
         Producto p = new Producto();
-        p.setNombre("Laptop");
+        p.setNombre("Test");
         when(repository.save(any(Producto.class))).thenReturn(p);
 
-        // Actuar (esto pone verde las líneas 26-28 de tu imagen)
-        Producto resultado = controller.guardarProducto(p);
+        // Actuar
+        Producto resultado = controller.guardar(p);
 
         // Verificar
         assertNotNull(resultado);
-        assertEquals("Laptop", resultado.getNombre());
+        assertEquals("Test", resultado.getNombre());
+    }
+
+    @Test
+    void eliminar_cuandoExiste_debeRetornarNoContent() {
+        when(repository.existsById(1L)).thenReturn(true);
+        ResponseEntity<Void> respuesta = controller.eliminar(1L);
+        assertEquals(204, respuesta.getStatusCode().value());
+        verify(repository).deleteById(1L);
+    }
+
+    @Test
+    void eliminar_cuandoNoExiste_debeRetornarNotFound() {
+        // ESTA LÍNEA sube tu cobertura al 100% en el método eliminar
+        when(repository.existsById(1L)).thenReturn(false);
+        ResponseEntity<Void> respuesta = controller.eliminar(1L);
+        assertEquals(404, respuesta.getStatusCode().value());
+    }
+
+    @Test
+    void obtenerPorId_cuandoExiste_debeRetornarOk() {
+        Producto p = new Producto();
+        p.setId(1L);
+        when(repository.findById(1L)).thenReturn(Optional.of(p));
+
+        ResponseEntity<Producto> respuesta = controller.obtenerPorId(1L);
+
+        assertEquals(200, respuesta.getStatusCode().value());
+        assertEquals(1L, respuesta.getBody().getId());
+    }
+
+    @Test
+    void obtenerPorId_cuandoNoExiste_debeRetornarNotFound() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+        ResponseEntity<Producto> respuesta = controller.obtenerPorId(99L);
+        assertEquals(404, respuesta.getStatusCode().value());
     }
 }
