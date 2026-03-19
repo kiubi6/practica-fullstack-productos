@@ -1,50 +1,51 @@
-:host {
-  display: block;
-  width: 100vw; /* Ocupa todo el ancho visual */
-}
-
-table {
-  width: 100% !important;
-  min-width: 1000px; /* Evita que las columnas se amontonen */
-}
-/* Forzamos al componente a ocupar todo el ancho disponible */
+/* Mantenemos tu configuración de ancho */
 :host {
   display: block;
   width: 100%;
   margin: 0;
   padding: 0;
+  /* AGREGADO: Fondo verde sólido para todo el componente */
+  background-color: #22c55e !important; /* Verde Esmeralda de Tailwind */
+  min-height: 100vh;
 }
 
-/* Contenedor principal de la tabla */
+
+
+/* Contenedor principal de la tabla (tu código) */
 .card {
   width: 100% !important;
   max-width: 100% !important;
-  border-radius: 1.5rem; /* Bordes redondeados elegantes */
-  overflow: visible !important; /* Matamos el recorte que genera el scroll */
+  border-radius: 1.5rem;
+  overflow: visible !important;
 }
 
-/* La tabla debe expandirse al 100% sí o sí */
+/* La tabla (tu código) */
 table {
   width: 100% !important;
   min-width: 100% !important;
   border-collapse: collapse;
-  table-layout: auto; /* Permite que las columnas se ajusten al contenido */
+  table-layout: auto;
 }
 
-/* Ajuste para las celdas para que no se amontone el texto */
+/* Celdas (tu código) */
 th, td {
-  white-space: nowrap; /* Evita que el texto salte de línea de forma fea */
+  white-space: nowrap;
   padding: 1rem 1.5rem !important;
 }
 
-/* Estilo extra para el hover de las filas */
+/* Hover (tu código) */
 tbody tr:hover {
   background-color: rgba(59, 130, 246, 0.05) !important;
   transition: background-color 0.2s ease;
 }
 
-/* Eliminamos cualquier rastro de la barra de scroll gris */
+/* Scroll (tu código) */
 .overflow-x-auto {
   overflow-x: visible !important;
   width: 100% !important;
+}
+
+/* OPCIONAL: Ocultar el checkbox de activo en el modal si te molesta */
+.hidden-active-block {
+  display: none !important;
 }

@@ -1,0 +1,32 @@
+/* Esto crea una capa verde que tapa todo lo que haya atrás */
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #22c55e !important; /* El verde que te gusta */
+  z-index: 9999; /* Se pone por encima de cualquier otro div blanco */
+  overflow: hidden;
+}
+
+/* Contenedor para centrar la tarjeta */
+.login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* La tarjeta blanca flotante */
+.card {
+  background-color: white !important;
+  border-radius: 2rem;
+  padding: 3rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 400px;
+  border: none !important;
+}

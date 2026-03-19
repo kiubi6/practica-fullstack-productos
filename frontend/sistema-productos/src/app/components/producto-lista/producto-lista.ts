@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; // 1. Importamos el Router para la navegación
 import { ProductoService } from '../../services/producto';
 import { Producto } from '../../models/producto';
 
@@ -15,13 +16,16 @@ export class ProductoListaComponent implements OnInit {
 
   // Listas para el manejo de datos y filtros
   productos: Producto[] = [];
-  productosOriginales: Producto[] = []; // Respaldo para la búsqueda
+  productosOriginales: Producto[] = [];
   terminoBusqueda: string = '';
 
   // Objeto para el formulario del Modal
   productoSeleccionado: Producto = this.limpiarProducto();
 
-  constructor(private productoService: ProductoService) {}
+  constructor(
+    private productoService: ProductoService,
+    private router: Router // 2. Inyectamos el Router
+  ) {}
 
   ngOnInit(): void {
     this.obtenerProductos();
@@ -32,29 +36,25 @@ export class ProductoListaComponent implements OnInit {
     this.productoService.listar().subscribe({
       next: (data) => {
         this.productosOriginales = data;
-        this.productos = data; // Al cargar, mostramos todo
+        this.productos = data;
       },
       error: (err: any) => console.error('Error al cargar productos:', err)
     });
   }
 
   // --- 2. MOTOR DE BÚSQUEDA (FRONTEND) ---
- filtrar() {
-   const termino = this.terminoBusqueda.trim();
+  filtrar() {
+    const termino = this.terminoBusqueda.trim();
+    if (!termino) {
+      this.productos = [...this.productosOriginales];
+      return;
+    }
+    // Filtrado por ID exacto como pediste
+    this.productos = this.productosOriginales.filter(p =>
+      p.id?.toString() === termino
+    );
+  }
 
-   // Si el buscador está vacío, regresamos todos los productos
-   if (!termino) {
-     this.productos = [...this.productosOriginales];
-     return;
-   }
-
-   // FILTRADO ESTRICTO: Solo comparamos el ID
-   this.productos = this.productosOriginales.filter(p => {
-     // Usamos toString() para comparar el número del ID con el texto del input
-     // Usamos === para que sea una coincidencia EXACTA
-     return p.id?.toString() === termino;
-   });
- }
   // --- 3. GESTIÓN DE DATOS (CREATE / UPDATE) ---
   limpiarProducto(): Producto {
     return {
@@ -63,39 +63,47 @@ export class ProductoListaComponent implements OnInit {
       categoria: '',
       precio: 0,
       existencias: 0,
-      activo: true
+      activo: true // El backend lo gestionará, pero lo inicializamos aquí
     };
   }
 
   prepararEditar(producto: Producto) {
-    // Clonamos para evitar que la tabla cambie mientras editamos en el modal
     this.productoSeleccionado = { ...producto };
   }
 
   guardar() {
     this.productoService.guardar(this.productoSeleccionado).subscribe({
       next: () => {
-        this.obtenerProductos(); // Refrescamos la lista de la BD
+        this.obtenerProductos();
         this.productoSeleccionado = this.limpiarProducto();
-        this.terminoBusqueda = ''; // Limpiamos búsqueda tras guardar
+        this.terminoBusqueda = '';
         alert('¡Operación exitosa!');
       },
       error: (err: any) => alert('Error al guardar el producto')
     });
   }
 
-  // --- 4. ELIMINAR (DELETE) ---
+  // --- 4. ELIMINAR (DELETE LÓGICO) ---
   eliminar(id?: number) {
     if (!id) return;
 
-    if (confirm('¿Estás seguro de que deseas eliminar este registro de la base de datos?')) {
+    // Mensaje preventivo para evitar borrados accidentales
+    if (confirm('¿Estás seguro de que deseas desactivar este registro? Podrás recuperarlo luego.')) {
       this.productoService.eliminar(id).subscribe({
         next: () => {
-          this.obtenerProductos();
-          alert('Producto eliminado correctamente');
+          this.obtenerProductos(); // Refresca la lista (ya no saldrá el desactivado)
+          alert('Producto desactivado correctamente');
         },
-        error: (err: any) => alert('No se pudo eliminar el producto')
+        error: (err: any) => alert('No se pudo procesar la eliminación')
       });
     }
+  }
+
+  // --- 5. SEGURIDAD: CERRAR SESIÓN ---
+  salir() {
+    // Removemos la marca de sesión simulada
+    localStorage.removeItem('isLoggedIn');
+    // Navegación programática hacia el Login
+    this.router.navigate(['/login']);
   }
 }

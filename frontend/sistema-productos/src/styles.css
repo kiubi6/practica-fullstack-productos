@@ -1,5 +1,19 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Esto mata cualquier borde blanco en el navegador */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #22c55e !important; /* El verde total */
+  overflow-x: hidden;
+}
+
+/* Forzamos al contenedor raíz de Angular a ser verde */
+app-root {
+  display: block;
+  min-height: 100vh;
+  background-color: #22c55e !important;
+}
