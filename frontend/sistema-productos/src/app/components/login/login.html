@@ -1,0 +1,63 @@
+<div class="login-screen">
+
+  <div class="flex h-screen items-center justify-center px-4">
+
+    <div class="card card-bordered p-10 shadow-2xl w-full max-w-md bg-white border-none rounded-[2rem]">
+      <div class="card-body p-0">
+
+        <div class="flex flex-col items-center gap-4 mb-10 text-center">
+          <div class="p-4 bg-blue-50 rounded-full text-blue-500 shadow-sm">
+            <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+          </div>
+          <h1 class="text-3xl font-black tracking-tighter text-slate-800 italic">SISTEMA PRODUCTOS</h1>
+          <p class="text-slate-400 font-medium text-sm">Gestiona tu inventario de forma segura</p>
+        </div>
+
+        <form class="space-y-6" (ngSubmit)="ingresar()">
+
+          <div class="form-control">
+            <label class="label text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Usuario</label>
+            <input
+              type="text"
+              name="usuario"
+              [(ngModel)]="credenciales.usuario"
+              class="input input-solid input-lg w-full bg-slate-50 border-none font-bold"
+              placeholder="admin"
+              required
+            />
+          </div>
+
+          <div class="form-control">
+            <label class="label text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="credenciales.password"
+              class="input input-solid input-lg w-full bg-slate-50 border-none font-bold"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <div *ngIf="error" class="alert alert-error gap-3 p-4 rounded-xl text-xs font-bold shadow-lg shadow-error/10">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z" fill="currentColor"/>
+            </svg>
+            <span>Credenciales incorrectas.</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg rounded-2xl shadow-xl shadow-blue-200 font-black text-lg mt-4 transition-transform active:scale-95">
+            INGRESAR AL SISTEMA
+          </button>
+        </form>
+
+        <div class="text-center mt-8 text-[10px] font-black text-slate-300 uppercase tracking-widest">
+          &copy; 2026 Panel de Control
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

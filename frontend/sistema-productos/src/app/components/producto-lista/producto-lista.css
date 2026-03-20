@@ -1,0 +1,51 @@
+/* Mantenemos tu configuración de ancho */
+:host {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /* AGREGADO: Fondo verde sólido para todo el componente */
+  background-color: #22c55e !important; /* Verde Esmeralda de Tailwind */
+  min-height: 100vh;
+}
+
+
+
+/* Contenedor principal de la tabla (tu código) */
+.card {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 1.5rem;
+  overflow: visible !important;
+}
+
+/* La tabla (tu código) */
+table {
+  width: 100% !important;
+  min-width: 100% !important;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Celdas (tu código) */
+th, td {
+  white-space: nowrap;
+  padding: 1rem 1.5rem !important;
+}
+
+/* Hover (tu código) */
+tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.05) !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Scroll (tu código) */
+.overflow-x-auto {
+  overflow-x: visible !important;
+  width: 100% !important;
+}
+
+/* OPCIONAL: Ocultar el checkbox de activo en el modal si te molesta */
+.hidden-active-block {
+  display: none !important;
+}

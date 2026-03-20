@@ -1,0 +1,164 @@
+<div class="main-bg">
+  <div class="max-w-[1400px] mx-auto space-y-6">
+
+    <div class="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-slate-100 w-full">
+      <div class="flex flex-col gap-6">
+
+        <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+          <div>
+            <span class="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Panel de Control</span>
+            <h1 class="text-3xl font-black text-slate-800 tracking-tighter">Gestión de Productos</h1>
+          </div>
+          <button (click)="salir()" class="btn btn-error btn-sm px-6 rounded-xl font-bold shadow-lg shadow-error/20">
+            Cerrar Sesión
+          </button>
+        </div>
+
+        <div class="flex flex-col lg:flex-row items-end gap-4">
+          <div class="flex-1 w-full text-left">
+            <label class="text-xs font-bold text-slate-400 mb-2 block uppercase tracking-widest">Consultar por ID o Nombre</label>
+            <div class="relative">
+              <input type="text"
+                     class="input input-solid input-lg w-full pl-12 bg-slate-50/50 border-none font-medium focus:ring-2 ring-primary/20"
+                     placeholder="Escribe el ID, nombre o marca..."
+                     [(ngModel)]="terminoBusqueda"
+                     (input)="filtrar()">
+              <span class="absolute left-4 top-3.5 opacity-40 text-xl">🔍</span>
+            </div>
+          </div>
+
+          <div class="flex gap-3 w-full lg:w-auto">
+            <button class="btn btn-primary btn-lg flex-1 lg:px-6 rounded-2xl shadow-lg font-bold btn-refresh-fix"
+                    (click)="obtenerProductos(); terminoBusqueda = ''">
+              <span class="flex items-center"></span>
+              <span>Refrescar</span>
+            </button>
+
+            <label class="btn btn-outline-primary btn-lg flex-1 lg:px-8 rounded-2xl border-2 font-bold cursor-pointer"
+                   for="modal-form"
+                   (click)="productoSeleccionado = limpiarProducto()">
+              + Nuevo
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-white shadow-2xl border-none w-full rounded-3xl overflow-hidden">
+      <div class="bg-slate-900 p-5 flex justify-between items-center">
+        <h2 class="text-white font-bold tracking-wider uppercase text-sm font-sans">Registros encontrados en la Base de Datos</h2>
+        <span class="badge badge-flat-primary font-bold">{{ productos.length }} Productos</span>
+      </div>
+
+      <div class="overflow-x-auto w-full">
+        <table class="table w-full border-collapse min-w-[1000px]">
+          <thead>
+          <tr class="bg-slate-100 text-slate-600 border-b">
+            <th class="py-4 px-6 text-center w-24 font-black">ID</th>
+            <th class="py-4 px-6 text-left font-black">Información Técnica</th>
+            <th class="py-4 px-6 text-left font-black">Precio / Stock</th>
+            <th class="py-4 px-6 text-center font-black">Disponibilidad</th>
+            <th class="py-4 px-6 text-center font-black">Acciones de Gestión</th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+          <tr *ngFor="let p of productos" class="hover:bg-blue-50/40 transition-all group">
+            <td class="px-6 text-center">
+              <span class="badge badge-flat-secondary font-mono font-bold text-lg">#{{ p.id }}</span>
+            </td>
+            <td class="px-6 py-5">
+              <div class="flex flex-col text-left">
+                <span class="font-black text-slate-800 text-xl group-hover:text-blue-600 transition-colors">{{ p.nombre }}</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">{{ p.marca }} | {{ p.categoria }}</span>
+              </div>
+            </td>
+            <td class="px-6 text-left">
+              <div class="flex flex-col">
+                <span class="text-2xl font-black text-slate-900">${{ p.precio | number:'1.2-2' }}</span>
+                <span [class]="p.existencias > 0 ? 'text-xs font-bold text-success' : 'text-xs font-bold text-error uppercase'">
+                    {{ p.existencias > 0 ? p.existencias + ' en stock' : 'Sin existencias' }}
+                  </span>
+              </div>
+            </td>
+            <td class="px-6 text-center">
+              <div [class]="p.activo ? 'badge badge-success px-4' : 'badge badge-error px-4'">
+                {{ p.activo ? 'ACTIVO' : 'INACTIVO' }}
+              </div>
+            </td>
+            <td class="px-6">
+              <div class="flex justify-center gap-3">
+                <label for="modal-form" class="btn btn-warning shadow-md font-bold px-6 cursor-pointer" (click)="prepararEditar(p)">
+                  ✏️ Modificar
+                </label>
+                <button class="btn btn-outline-error border-2 font-bold px-6" (click)="eliminar(p.id!)">
+                  🗑️ Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="productos.length === 0">
+            <td colspan="5" class="py-20 text-center">
+              <div class="flex flex-col items-center gap-2 opacity-40">
+                <span class="text-6xl">🔍</span>
+                <p class="text-xl font-bold">No se encontraron productos que coincidan con "{{ terminoBusqueda }}"</p>
+                <button class="btn btn-sm btn-ghost underline" (click)="terminoBusqueda = ''; filtrar()">Ver todos los productos</button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <input class="modal-state" id="modal-form" type="checkbox" />
+  <div class="modal">
+    <label class="modal-overlay" for="modal-form"></label>
+    <div class="modal-content flex flex-col gap-6 w-full max-w-3xl p-10 rounded-[2.5rem] bg-white">
+      <label for="modal-form" class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6">✕</label>
+
+      <div class="border-b border-slate-100 pb-4 text-left">
+        <h2 class="text-4xl font-black text-slate-900 italic">
+          {{ productoSeleccionado.id ? 'Ficha de Producto #' + productoSeleccionado.id : 'Ficha de Nuevo Registro' }}
+        </h2>
+        <p class="text-slate-400 font-medium">Gestiona la información directamente en la base de datos.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+        <div class="md:col-span-2">
+          <label class="text-xs font-black text-slate-400 mb-2 block uppercase tracking-widest">Nombre Comercial</label>
+          <input class="input input-solid input-lg w-full bg-slate-50 font-bold" [(ngModel)]="productoSeleccionado.nombre" />
+        </div>
+        <div>
+          <label class="text-xs font-black text-slate-400 mb-2 block uppercase tracking-widest">Marca Fabricante</label>
+          <input class="input input-solid w-full bg-slate-50" [(ngModel)]="productoSeleccionado.marca" />
+        </div>
+        <div>
+          <label class="text-xs font-black text-slate-400 mb-2 block uppercase tracking-widest">Categoría del Bien</label>
+          <input class="input input-solid w-full bg-slate-50" [(ngModel)]="productoSeleccionado.categoria" />
+        </div>
+        <div>
+          <label class="text-xs font-black text-slate-400 mb-2 block uppercase tracking-widest">Precio al Público ($)</label>
+          <input type="number" class="input input-solid w-full bg-slate-50 text-xl font-black" [(ngModel)]="productoSeleccionado.precio" />
+        </div>
+        <div>
+          <label class="text-xs font-black text-slate-400 mb-2 block uppercase tracking-widest">Stock en Almacén</label>
+          <input type="number" class="input input-solid w-full bg-slate-50 text-xl font-black" [(ngModel)]="productoSeleccionado.existencias" />
+        </div>
+      </div>
+
+      <div class="hidden-active-block flex items-center gap-4 p-5 bg-blue-50/50 rounded-2xl border border-blue-100">
+        <input type="checkbox" class="checkbox checkbox-primary checkbox-lg" [(ngModel)]="productoSeleccionado.activo" />
+        <span class="font-black text-blue-900 uppercase text-xs tracking-tighter">Habilitar visibilidad inmediata en el sistema</span>
+      </div>
+
+      <div class="flex gap-4 mt-4">
+        <label for="modal-form" class="btn btn-primary flex-1 btn-lg shadow-blue-200 shadow-2xl font-black text-lg" (click)="guardar()">
+          {{ productoSeleccionado.id ? 'CONFIRMAR ACTUALIZACIÓN' : 'CONFIRMAR REGISTRO' }}
+        </label>
+        <label for="modal-form" class="btn btn-ghost font-bold btn-lg text-slate-400 cursor-pointer">Descartar</label>
+      </div>
+    </div>
+  </div>
+</div>
