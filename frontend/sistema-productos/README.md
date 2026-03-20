@@ -2,58 +2,49 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
 
-## Development server
+# 🖥️ Sistema de Gestión de Productos - Frontend (Bun Stack)
 
-To start a local development server, run:
+Interfaz de usuario de alto rendimiento desarrollada con **Angular 17+**, diseñada para la administración centralizada de inventarios. Este proyecto destaca por el uso de **Bun** como runtime, logrando tiempos de instalación y ejecución superiores a los estándares tradicionales.
 
+---
+
+## 🚀 Tecnologías y Herramientas
+* **Angular**: Framework principal para la arquitectura de componentes y servicios.
+* **Bun**: Runtime y gestor de paquetes de última generación (reemplaza a Node.js/npm).
+* **Tailwind CSS**: Framework de utilidades para un diseño responsivo y atómico.
+* **RippleUI**: Suite de componentes para una interfaz moderna, limpia y consistente.
+
+---
+
+## 🛡️ Seguridad y Experiencia de Usuario (UX)
+* **AuthGuard**: Implementación de seguridad en rutas privadas. Protege el acceso al panel de productos, redirigiendo al usuario al login si no existe una sesión activa.
+* **Sistema de Login**: Validación de credenciales administrativas con persistencia de estado mediante `localStorage`.
+* **Diseño "Green Energy"**: Interfaz personalizada con fondo verde vibrante (`#22c55e`), tarjetas blancas con bordes redondeados (`2rem`) y sombras profundas para una jerarquía visual clara.
+* **Gestión Dinámica**: Tabla responsiva con soporte para scroll horizontal y acciones de CRUD inmediatas.
+
+---
+
+## ⚙️ Requisitos Previos
+Es indispensable contar con **Bun** instalado en su entorno local:
+* **Windows (PowerShell):** `powershell -c "irm bun.sh/install.ps1 | iex"`
+* **Linux/macOS:** `curl -fsSL https://bun.sh/install | bash`
+
+---
+
+## 🛠️ Instalación y Ejecución
+
+Siga estos pasos para desplegar el entorno de desarrollo:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone <url-de-tu-repositorio-frontend>
+   cd nombre-del-proyecto-frontend.
+
+##  Instalación dependencias
+    ```bash
+     bun install.
+
+##  Ejecutar el servidor de desarrollo
 ```bash
-ng serve
-```
+bun run ng serve -o
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
